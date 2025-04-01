@@ -8,12 +8,11 @@ import javax.swing.undo.UndoManager;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import org.jabref.gui.DialogService;
 import org.jabref.gui.preferences.GuiPreferences;
 import org.jabref.gui.preview.PreviewViewer;
@@ -117,7 +116,23 @@ public class DatabaseChangesResolverDialog extends BaseDialog<Boolean> {
         EasyBind.subscribe(viewModel.selectedChangeProperty(), selectedChange -> {
             if (selectedChange != null) {
                 DatabaseChangeDetailsView detailsView = DETAILS_VIEW_CACHE.computeIfAbsent(selectedChange, databaseChangeDetailsViewFactory::create);
-                changeInfoPane.setCenter(detailsView);
+
+                BorderPane container = new BorderPane();
+                container.setCenter(detailsView);
+
+                WebView webView = new WebView();
+                WebEngine webEngine = webView.getEngine();
+                String url = getClass().getResource("/JSONDiff.html").toExternalForm();
+                webEngine.load(url);
+
+                TabPane tabPane = new TabPane();
+                Tab detailsTab = new Tab("Details", detailsView);
+                detailsTab.setClosable(false);
+                Tab editorTab = new Tab("JSON Diff", webView);
+                editorTab.setClosable(false);
+                tabPane.getTabs().addAll(detailsTab, editorTab);
+
+                changeInfoPane.setCenter(tabPane);
             }
         });
 

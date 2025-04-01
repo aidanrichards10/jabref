@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="./style.css" type="text/css" />
+    <link
+            rel="stylesheet"
+            href="https://esm.sh/jsondiffpatch@0.6.0/lib/formatters/styles/html.css"
+            type="text/css"
+    />
+    <link
+            rel="stylesheet"
+            href="https://esm.sh/jsondiffpatch@0.6.0/lib/formatters/styles/annotated.css"
+            type="text/css"
+    />
+    <title>JSONDiff</title>
+</head>
+<body>
+    <div id="visual"></div>
+    <hr />
+    <div id="annotated"></div>
+    <script type="module">
+        import * as jsondiffpatch from 'https://esm.sh/jsondiffpatch@0.6.0';
+        import * as annotatedFormatter from 'https://esm.sh/jsondiffpatch@0.6.0/formatters/annotated';
+        import * as htmlFormatter from 'https://esm.sh/jsondiffpatch@0.6.0/formatters/html';
+
+        // beautiful html diff
+        document.getElementById('visual').innerHTML = htmlFormatter.format(
+            delta,
+            left,
+        );
+
+        // self-explained json
+        document.getElementById('annotated').innerHTML =
+            annotatedFormatter.format(delta, left);
+    </script>
+</body>
+</html>
